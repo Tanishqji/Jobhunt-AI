@@ -1,0 +1,139 @@
+filters:
+  include_titles:
+  - junior software developer
+  - java developer
+  - \b(software|backend|back-end|server|platform|infrastructure|infra|systems|distributed|cloud)\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\b(backend|back-end|platform|infrastructure|infra|systems|distributed|cloud)\b
+  - \bsde\b
+  - \bsde\s*-?\s*(i{1,3}|[123])\b
+  - software development engineer
+  - software engineer
+  - software developer
+  - site reliability engineer
+  - \bsre\b
+  - member of technical staff
+  - \bpython\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\bpython\b
+  - \bpython\b
+  - python backend engineer
+  - python backend developer
+  - python developer
+  - python software engineer
+  - \b(ai|artificial intelligence)\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\b(ai|artificial intelligence)\b
+  - \bgenai\b
+  - \bgenerative ai\b
+  - generative ai engineer
+  - generative ai developer
+  - ai engineer
+  - ai developer
+  - ai software engineer
+  - ai application engineer
+  - ai application developer
+  - genai engineer
+  - genai developer
+  - \b(llm|large language model)\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\b(llm|large language model)\b
+  - \brag\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\brag\b
+  - \b(retrieval augmented generation|rag)\b
+  - \b(ai agent|agentic ai|agentic)\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\b(ai agent|agentic ai|agentic)\b
+  - llm engineer
+  - llm developer
+  - llm application engineer
+  - rag engineer
+  - rag developer
+  - ai agent engineer
+  - agentic ai engineer
+  - \b(machine learning|ml)\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\b(machine learning|ml)\b
+  - machine learning engineer
+  - machine learning developer
+  - ml engineer
+  - ml developer
+  - applied ai engineer
+  - applied machine learning engineer
+  - \b(nlp|natural language processing)\b.*\b(engineer|developer)\b
+  - \b(computer vision|cv)\b.*\b(engineer|developer)\b
+  - \b(deep learning|neural network)\b.*\b(engineer|developer)\b
+  - nlp engineer
+  - computer vision engineer
+  - deep learning engineer
+  - \bbackend\b
+  - \bback-end\b
+  - backend engineer
+  - backend developer
+  - api engineer
+  - api developer
+  - rest api engineer
+  - rest api developer
+  - \bfastapi\b
+  - \bdjango\b.*\b(engineer|developer)\b
+  - \bflask\b.*\b(engineer|developer)\b
+  - fastapi developer
+  - fastapi engineer
+  - django developer
+  - django engineer
+  - \bmern\b
+  - mern stack developer
+  - mern stack engineer
+  - full stack engineer
+  - full-stack engineer
+  - full stack developer
+  - full-stack developer
+  - \b(full[- ]stack)\b.*\b(engineer|developer)\b
+  - \b(node\.?js|node)\b.*\b(engineer|developer)\b
+  - \b(engineer|developer)\b.*\b(node\.?js|node)\b
+  - \bexpress\.?js\b.*\b(engineer|developer)\b
+  - \bjava\b.*\b(backend|software|engineer|developer)\b
+  - \b(backend|software|engineer|developer)\b.*\bjava\b
+  - spring boot developer
+  - spring boot engineer
+  - java backend developer
+  - java backend engineer
+  - \bnetwork(ing)?\s+(software\s+)?engineer\b
+  - \b(kernel|embedded|firmware|driver|packet|dataplane|data plane)\b.*\bengineer\b
+  - \bengineer\b.*\b(kernel|packet|dataplane|networking|performance)\b
+  - \bperformance engineer\b
+  - \bsystems engineer\b
+  - \bc\+\+\b.*\bengineer\b
+  - \bengineer\b.*\bc\+\+\b
+  exclude_titles:
+  - \b(staff|principal|distinguished|fellow|architect)\b
+  - \bsenior\b
+  - \b(lead|tech lead|team lead)\b
+  - \b(director|vp|vice president|head of|chief|cto)\b
+  - \b(manager|management)\b
+  - \b(sales|account executive|marketing|recruit|support|customer success)\b
+  - \b(frontend|front-end|ios|android|mobile|game|designer)\b
+  - \b(data scientist|machine learning scientist|research scientist)\b
+  - \b(data engineer|analytics engineer|business intelligence)\b
+  - \b(qa|quality assurance|test engineer|testing engineer|automation tester)\b
+  locations:
+  - bangalore
+  - bengaluru
+  - indore
+  - pune
+  - gurgaon
+  - gurugram
+  - hyderabad
+  - chennai
+  - mumbai
+  - delhi
+  - new delhi
+  - ahmedabad
+  - jaipur
+  - india
+  allow_remote: true
+  max_age_days: 30
+  screen_batch_size: 8
+  screen_jd_chars: 1400
+  draft_jd_chars: 6000
+  score_threshold: 5.5
+  max_per_digest: 5
+companies_file: companies.yaml
+profile_file: profile.json
+seen_file: seen.json
+digest_file: out/digest.html
+tracker_csv: out/tracker.csv

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobHunt AI — Autonomous Personal Job Search Agent</title>
+  <meta name="description" content="AI-powered personal job search agent. Crawls public ATS boards, screens against your resume, and tracks applications.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       PAGE 1: Welcome & Onboarding Landing View
+       ========================================================================= -->
+  <div id="view-onboarding" class="onboarding-page">
+    <div class="onboarding-hero">
+      <div class="brand-pill">
+        <span class="brand-pill-dot"></span>
+        <span>AI-Powered Autonomous Job Hunter</span>
+      </div>
+
+      <h1 class="hero-headline">Welcome to <span class="gradient-text">JobHunt AI</span></h1>
+      <p class="hero-subtext">
+        Tell us who you are, what roles you want, and where you'd like to work.
+        Our agent monitors live ATS boards, screens postings with AI against your resume, and finds high-match opportunities with direct apply links.
+      </p>
+    </div>
+
+    <!-- Onboarding Setup Form Card -->
+    <div class="onboarding-card">
+      <div class="card-glow"></div>
+      <div class="form-header">
+        <div class="step-badge">Step 1 of 1</div>
+        <h2>Configure Your Job Hunt</h2>
+        <p>Set your target criteria. You will be redirected straight to your personalized hiring matches.</p>
+      </div>
+
+      <form id="onboard-form" onsubmit="handleOnboardSubmit(event)">
+        <div class="form-grid-2">
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="ob-fullname">Full Name <span class="required">*</span></label>
+            <div class="input-with-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <input type="text" id="ob-fullname" name="full_name" placeholder="e.g. Tanishq Sejwar" required>
+            </div>
+          </div>
+
+          <!-- Email Address -->
+          <div class="form-group">
+            <label for="ob-email">Email Address (For Alerts &amp; Digest) <span class="required">*</span></label>
+            <div class="input-with-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <input type="email" id="ob-email" name="email" placeholder="e.g. your.email@gmail.com" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Position / Role -->
+        <div class="form-group">
+          <label for="ob-positions">Positions / Roles You Want to Apply For <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            <input type="text" id="ob-positions" name="positions" placeholder="e.g. Software Engineer, Java Developer, Backend Developer" required>
+          </div>
+          <small class="form-hint">Separate multiple positions with commas.</small>
+        </div>
+
+        <!-- Preferred Locations -->
+        <div class="form-group">
+          <label for="ob-locations">Preferred Locations <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <input type="text" id="ob-locations" name="locations" placeholder="e.g. Bangalore, Pune, Hyderabad, Remote" required>
+          </div>
+          <small class="form-hint">Includes hybrid, onsite, and remote roles.</small>
+        </div>
+
+        <!-- Resume Upload -->
+        <div class="form-group">
+          <label>Your Resume (PDF)</label>
+          <div class="dropzone" id="resume-dropzone" onclick="document.getElementById('ob-resume').click()">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            <div class="dropzone-text">
+              <span id="dropzone-title">Click to upload your resume (PDF)</span>
+              <span class="dropzone-sub">Used by Gemini AI to calculate real fit scores</span>
+            </div>
+            <input type="file" id="ob-resume" name="resume_file" accept=".pdf" style="display:none;" onchange="handleFileSelected(this)">
+          </div>
+        </div>
+
+        <div class="form-actions-main">
+          <button type="submit" id="btn-submit-onboard" class="btn-hero-launch">
+            <span>Find Opportunities &amp; Launch Agent</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+
+        <div class="onboard-footer-link">
+          <button type="button" class="btn-link" onclick="goToDashboard()">Skip to Existing Dashboard &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       PROCESSING INTERSTITIAL SCREEN
+       ========================================================================= -->
+  <div id="view-processing" class="processing-overlay">
+    <div class="processing-card">
+      <div class="spinner-large"></div>
+      <h2 id="proc-title">Scanning Active Job Boards...</h2>
+      <p id="proc-desc">Polling Greenhouse, Lever, and Ashby boards for matching roles...</p>
+
+      <div class="progress-checklist">
+        <div class="check-item active" id="chk-1">
+          <div class="check-icon">&#10003;</div>
+          <span>Configuring profile &amp; locations</span>
+        </div>
+        <div class="check-item" id="chk-2">
+          <div class="check-icon">&#10003;</div>
+          <span>Crawling verified company ATS boards</span>
+        </div>
+        <div class="check-item" id="chk-3">
+          <div class="check-icon">&#10003;</div>
+          <span>Filtering title &amp; location criteria</span>
+        </div>
+        <div class="check-item" id="chk-4">
+          <div class="check-icon">&#10003;</div>
+          <span>AI scoring against your profile</span>
+        </div>
+      </div>
+
+      <div class="processing-note">Redirecting to your dashboard in a moment...</div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       PAGE 2: Main Application Dashboard
+       ========================================================================= -->
+  <div id="view-dashboard" class="app-layout" style="display:none;">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">JobHunt AI</span>
+          <span class="brand-subtitle">Autonomous Agent</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button id="nav-feed" class="nav-item active" onclick="switchTab('feed')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Discovered Jobs</span>
+          <span id="badge-total-jobs" class="nav-badge">0</span>
+        </button>
+
+        <button id="nav-tracker" class="nav-item" onclick="switchTab('tracker')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          <span>Applications</span>
+          <span id="badge-applied-count" class="nav-badge highlight">0</span>
+        </button>
+
+        <button id="nav-companies" class="nav-item" onclick="switchTab('companies')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-4"></path><path d="M9 9v.01"></path><path d="M9 13v.01"></path><path d="M9 17v.01"></path></svg>
+          <span>Companies</span>
+          <span id="badge-companies-count" class="nav-badge">0</span>
+        </button>
+
+        <button id="nav-digest" class="nav-item" onclick="switchTab('digest')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Daily Digest</span>
+        </button>
+
+        <button id="nav-profile" class="nav-item" onclick="switchTab('profile')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>Profile &amp; Rules</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-change-criteria" onclick="goToOnboarding()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Edit Search Criteria</span>
+        </button>
+
+        <div class="agent-status-card">
+          <div class="status-indicator">
+            <span id="agent-pulse" class="pulse-dot idle"></span>
+            <span id="agent-status-text" class="status-label">Agent Idle</span>
+          </div>
+          <button id="btn-run-crawler" class="btn-primary-run" onclick="openRunModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Scan Boards Now</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Metrics Bar -->
+      <header class="top-header">
+        <div class="header-search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="global-search" placeholder="Search roles, companies, tech stack..." oninput="handleSearch(this.value)">
+        </div>
+
+        <div class="quick-stats">
+          <div class="stat-pill">
+            <span class="stat-value" id="stat-tracked">0</span>
+            <span class="stat-name">Tracked</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-value highlight-cyan" id="stat-emailed">0</span>
+            <span class="stat-name">Emailed</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-value highlight-green" id="stat-applied">0</span>
+            <span class="stat-name">Applied</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-value highlight-purple" id="stat-companies">0</span>
+            <span class="stat-name">Boards</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Welcome Back Banner -->
+      <div class="user-greeting-banner" id="user-greeting-banner">
+        <div class="greeting-content">
+          <span class="greeting-icon">&#9889;</span>
+          <div>
+            <h3 id="banner-title">Welcome to your opportunities!</h3>
+            <p id="banner-desc">Showing live openings matching your specified target roles and locations.</p>
+          </div>
+        </div>
+        <button class="btn-banner-action" onclick="openRunModal()">Rescan Now</button>
+      </div>
+
+      <!-- TAB 1: Discovered Jobs Feed -->
+      <section id="tab-feed" class="tab-view active">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Discovered Opportunities</h1>
+            <p class="view-desc">AI-ranked job postings matching your resume and criteria.</p>
+          </div>
+
+          <div class="filter-controls">
+            <div class="score-filter">
+              <label for="score-range">Min Score: <strong id="score-display">0.0</strong></label>
+              <input type="range" id="score-range" min="0" max="10" step="0.5" value="0" oninput="handleScoreChange(this.value)">
+            </div>
+
+            <div class="filter-toggle-group">
+              <button class="filter-btn active" id="f-all" onclick="setAppliedFilter('all')">All</button>
+              <button class="filter-btn" id="f-unapplied" onclick="setAppliedFilter('unapplied')">Unapplied</button>
+              <button class="filter-btn" id="f-applied" onclick="setAppliedFilter('applied')">Applied</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jobs Grid Container -->
+        <div id="jobs-grid" class="jobs-grid">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <span>Fetching screened opportunities...</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: Applications Tracker -->
+      <section id="tab-tracker" class="tab-view">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Application Tracker</h1>
+            <p class="view-desc">Keep track of every role you've applied to and export reports.</p>
+          </div>
+          <div class="action-buttons">
+            <a href="/api/digest" target="_blank" class="btn-secondary">View Latest Digest HTML</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table" id="tracker-table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Role Title</th>
+                <th>Location</th>
+                <th>Match Score</th>
+                <th>Status</th>
+                <th>Applied Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tracker-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: Companies Manager -->
+      <section id="tab-companies" class="tab-view">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Monitored Company Boards</h1>
+            <p class="view-desc">Direct ATS APIs polled daily without scraping or rate-limit blocks.</p>
+          </div>
+          <button class="btn-primary" onclick="openAddCompanyModal()">+ Add New Board</button>
+        </div>
+
+        <div id="companies-grid" class="companies-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- TAB 4: Daily Digest Preview -->
+      <section id="tab-digest" class="tab-view">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Email Digest Preview</h1>
+            <p class="view-desc">The formatted responsive email sent to your inbox.</p>
+          </div>
+          <button class="btn-secondary" onclick="refreshDigest()">Refresh Digest</button>
+        </div>
+        <div class="digest-iframe-container">
+          <iframe id="digest-frame" src="/api/digest" title="Daily Digest Preview"></iframe>
+        </div>
+      </section>
+
+      <!-- TAB 5: Profile & Rules Settings -->
+      <section id="tab-profile" class="tab-view">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Profile &amp; Match Rules</h1>
+            <p class="view-desc">Fine-tune the candidate resume representation and gatekeeper filters.</p>
+          </div>
+          <button class="btn-primary" onclick="saveProfileAndConfig()">Save Changes</button>
+        </div>
+
+        <div class="profile-grid">
+          <!-- Candidate Card -->
+          <div class="glass-card">
+            <h3 class="card-title">Candidate Profile</h3>
+            <div class="form-group">
+              <label for="prof-name">Full Name</label>
+              <input type="text" id="prof-name">
+            </div>
+            <div class="form-group">
+              <label for="prof-title">Current Title</label>
+              <input type="text" id="prof-title">
+            </div>
+            <div class="form-group">
+              <label for="prof-seniority">Seniority Level</label>
+              <input type="text" id="prof-seniority">
+            </div>
+            <div class="form-group">
+              <label for="prof-education">Education</label>
+              <input type="text" id="prof-education">
+            </div>
+            <div class="form-group">
+              <label for="prof-skills">Core Skills (comma separated)</label>
+              <textarea id="prof-skills" rows="4"></textarea>
+            </div>
+          </div>
+
+          <!-- Filter Rules Card -->
+          <div class="glass-card">
+            <h3 class="card-title">Filter Engine Tuning</h3>
+            <div class="form-group">
+              <label for="cfg-score-threshold">Minimum Score Threshold for Email Digest</label>
+              <input type="number" id="cfg-score-threshold" step="0.1" min="1" max="10">
+            </div>
+            <div class="form-group">
+              <label for="cfg-max-age">Max Job Age (Days)</label>
+              <input type="number" id="cfg-max-age">
+            </div>
+            <div class="form-group">
+              <label for="cfg-locations">Target Locations (comma separated)</label>
+              <textarea id="cfg-locations" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Remote Policy</label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="cfg-allow-remote">
+                Allow Remote Roles
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Run Crawler Modal -->
+  <div id="modal-run" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="pulse-dot idle" id="modal-pulse"></div>
+          <h2>Run Pipeline Scan</h2>
+        </div>
+        <button class="modal-close-btn" onclick="closeRunModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-text">Launch an on-demand scan across all monitored ATS endpoints, screen postings against your profile using Gemini, and update your tracker.</p>
+        
+        <div class="run-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="run-send" checked>
+            Email Digest to your inbox if matches are found
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="run-nodraft">
+            Skip Drafting stage (Screening only, faster)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="run-mock">
+            Use Mock Fixtures (Offline test mode)
+          </label>
+        </div>
+
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span>Execution Console</span>
+            <span id="terminal-badge" class="term-badge">Ready</span>
+          </div>
+          <pre id="terminal-output" class="terminal-content">Waiting to start scan...</pre>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeRunModal()">Close</button>
+        <button id="btn-start-scan" class="btn-primary-run" onclick="startScan()">
+          <span>Start Execution</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Company Modal -->
+  <div id="modal-company" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Add Monitored Company</h2>
+        <button class="modal-close-btn" onclick="closeCompanyModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="comp-name">Company Display Name</label>
+          <input type="text" id="comp-name" placeholder="e.g. Swiggy">
+        </div>
+        <div class="form-group">
+          <label for="comp-ats">Applicant Tracking System (ATS)</label>
+          <select id="comp-ats">
+            <option value="greenhouse">Greenhouse (boards-api.greenhouse.io)</option>
+            <option value="lever">Lever (api.lever.co)</option>
+            <option value="ashby">Ashby (api.ashbyhq.com)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="comp-slug">Board Slug</label>
+          <input type="text" id="comp-slug" placeholder="e.g. swiggy">
+          <small class="form-hint">The identifier in the careers URL, e.g. boards.greenhouse.io/<strong>stripe</strong></small>
+        </div>
+        <div id="comp-validate-msg" class="validation-msg"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeCompanyModal()">Cancel</button>
+        <button id="btn-save-company" class="btn-primary" onclick="submitCompany()">Validate &amp; Add</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

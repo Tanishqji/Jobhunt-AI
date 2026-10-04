@@ -1,0 +1,25 @@
+# Boards to poll. One entry per company.
+#
+#   ats:   greenhouse | lever | ashby
+#   slug:  the company's board identifier (NOT its domain)
+#   name:  whatever you want to see in the digest
+
+companies:
+  # India Engineering Hubs & Top Tech
+  - {ats: greenhouse, slug: inmobi, name: InMobi}
+  - {ats: greenhouse, slug: rubrik, name: Rubrik}
+  - {ats: greenhouse, slug: purestorage, name: Pure Storage}
+  - {ats: greenhouse, slug: groww, name: Groww}
+  - {ats: greenhouse, slug: twilio, name: Twilio}
+  - {ats: greenhouse, slug: stripe, name: Stripe}
+  - {ats: greenhouse, slug: mongodb, name: MongoDB}
+  - {ats: greenhouse, slug: elastic, name: Elastic}
+  - {ats: greenhouse, slug: cloudflare, name: Cloudflare}
+  - {ats: lever, slug: cred, name: CRED}
+  - {ats: lever, slug: dnb, name: Dun & Bradstreet}
+  - {ats: lever, slug: veeva, name: Veeva Systems}
+  - {ats: ashby, slug: opengov, name: OpenGov}
+  - {ats: ashby, slug: ramp, name: Ramp}
+  - {ats: ashby, slug: sentry, name: Sentry}
+  - {ats: ashby, slug: notion, name: Notion}
+  - {ats: ashby, slug: linear, name: Linear}
